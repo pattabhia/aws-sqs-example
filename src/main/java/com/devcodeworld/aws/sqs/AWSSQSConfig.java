@@ -19,11 +19,9 @@ public class AWSSQSConfig {
     private final String awsSecretKey;
 
 
-    private SecretConfig secretConfig;
-
     public AWSSQSConfig() {
-        secretConfig = new SecretConfig();
-        this.awsAccessKey = secretConfig.getSecrets().getAccessName();
+        final SecretConfig secretConfig = new SecretConfig();
+        this.awsAccessKey = secretConfig.getSecrets().getAccessKey();
         this.awsSecretKey = secretConfig.getSecrets().getAccessPass();
     }
 

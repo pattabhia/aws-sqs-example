@@ -5,9 +5,6 @@ import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueResult;
 import com.google.gson.Gson;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import static com.amazonaws.regions.Regions.US_EAST_1;
@@ -16,15 +13,15 @@ import static com.amazonaws.regions.Regions.US_EAST_1;
 @Component
 public class SecretConfig {
 
-    private Gson gson;
+    private final Gson gson;
 
     public SecretConfig() {
         gson = new Gson();
     }
 
-    public AwsSecrets getSecrets() {
+    public AwsSecrets getSecrets() throws RuntimeException {
 
-        final String secretName = "apiadmin-creds";
+        final String secretName = "apicreds";
 
         AWSSecretsManager client = AWSSecretsManagerClientBuilder
                 .standard()
@@ -33,11 +30,7 @@ public class SecretConfig {
 
         GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest().withSecretId(secretName);
         GetSecretValueResult getSecretValueResult;
-        try {
-            getSecretValueResult = client.getSecretValue(getSecretValueRequest);
-        } catch (Exception e) {
-            throw e;
-        }
+        getSecretValueResult = client.getSecretValue(getSecretValueRequest);
         if (getSecretValueResult.getSecretString() != null) {
             String secret = getSecretValueResult.getSecretString();
             return gson.fromJson(secret, AwsSecrets.class);

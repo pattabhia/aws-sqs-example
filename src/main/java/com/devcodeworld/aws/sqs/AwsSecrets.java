@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AwsSecrets {
 
-    private String accessName;
+    private String accessKey;
     private String accessPass;
 }
